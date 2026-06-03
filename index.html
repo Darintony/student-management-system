@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>EduTrack Pro — Dashboard & Register</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/student.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+</head>
+<body>
+
+<!-- Sidebar backdrop (mobile) -->
+<div class="sb-backdrop" id="sbBackdrop" onclick="closeSidebar()"></div>
+
+<!-- ══════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-top">
+    <div class="sidebar-logo">
+      <div class="logo-badge">🎓</div>
+      <div>
+        <div class="logo-name">EduTrack</div>
+        <div class="logo-tag">Pro · Student System</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav" aria-label="Main navigation">
+    <div class="nav-section-label">Main Menu</div>
+    <a href="index.html" class="nav-link">
+      <span class="nav-icon">📊</span>
+      <span class="nav-text">Dashboard</span>
+    </a>
+    <a href="index.html#register" class="nav-link" id="navRegister">
+      <span class="nav-icon">➕</span>
+      <span class="nav-text">Register Student</span>
+    </a>
+    <a href="students.html" class="nav-link">
+      <span class="nav-icon">📋</span>
+      <span class="nav-text">Student List</span>
+      <span class="nav-badge" id="navCount">0</span>
+    </a>
+    <div class="nav-section-label" style="margin-top:12px">System</div>
+    <a href="about.html" class="nav-link">
+      <span class="nav-icon">ℹ️</span>
+      <span class="nav-text">About</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">EduTrack Pro v2.0 &nbsp;·&nbsp; 2025</div>
+</aside>
+
+<!-- ══════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════ -->
+<div class="main">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="page-title-top" id="pageTitle">Dashboard</div>
+    <div class="topbar-search">
+      <span style="color:var(--text-muted);font-size:14px">🔍</span>
+      <input type="text" placeholder="Search students…" id="quickSearchInput" aria-label="Quick search">
+    </div>
+    <div class="topbar-avatar" title="Admin">A</div>
+  </header>
+
+  <div class="content">
+
+    <!-- ══════════════════════════════════
+         SECTION 1 — DASHBOARD
+    ══════════════════════════════════ -->
+    <section id="dashboard" aria-label="Dashboard">
+
+      <div class="sec-head">
+        <div>
+          <h2>Overview Dashboard</h2>
+          <p>Real-time snapshot of student enrollment data</p>
+        </div>
+        <button class="btn btn-primary" onclick="scrollToRegister()">➕ Register Student</button>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="stat-grid">
+        <div class="stat-card total">
+          <div class="stat-card-glow"></div>
+          <div class="stat-icon">👥</div>
+          <div class="stat-value" id="statTotal">0</div>
+          <div class="stat-label">Total Students</div>
+        </div>
+        <div class="stat-card male">
+          <div class="stat-card-glow"></div>
+          <div class="stat-icon">♂</div>
+          <div class="stat-value" id="statMale">0</div>
+          <div class="stat-label">Male Students</div>
+        </div>
+        <div class="stat-card female">
+          <div class="stat-card-glow"></div>
+          <div class="stat-icon">♀</div>
+          <div class="stat-value" id="statFemale">0</div>
+          <div class="stat-label">Female Students</div>
+        </div>
+        <div class="stat-card active">
+          <div class="stat-card-glow"></div>
+          <div class="stat-icon">✅</div>
+          <div class="stat-value" id="statActive">0</div>
+          <div class="stat-label">Active Students</div>
+        </div>
+      </div>
+
+      <!-- Bottom panels -->
+      <div class="dash-grid">
+        <!-- Recent registrations -->
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Recent Registrations</h3>
+            <span class="panel-badge" id="recentBadge">0</span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="mini-tbl" id="recentTbl" aria-label="Recent student registrations">
+              <thead>
+                <tr>
+                  <th>Photo</th>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Course</th>
+                  <th>Gender</th>
+                </tr>
+              </thead>
+              <tbody id="recentBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Students by course -->
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Students by Course</h3>
+          </div>
+          <div class="course-chart" id="courseChart" aria-label="Students by course chart"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <div style="height:48px"></div>
+
+    <!-- ══════════════════════════════════
+         SECTION 2 — REGISTER FORM
+    ══════════════════════════════════ -->
+    <section id="register" aria-label="Register student">
+
+      <div class="sec-head">
+        <div>
+          <h2 id="formHeading">Register New Student</h2>
+          <p id="formSubheading">Fill in all fields to enrol a student</p>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <form id="studentForm" novalidate>
+
+          <!-- Photo + top fields -->
+          <div class="form-top-row">
+            <!-- Photo upload -->
+            <div class="photo-wrap">
+              <div class="photo-zone" id="photoZone" role="button" tabindex="0"
+                   aria-label="Upload student photo" title="Click or drag to upload photo">
+              </div>
+              <input type="file" id="photoInput" accept="image/*" aria-hidden="true" tabindex="-1">
+              <span class="photo-zone-label">Click or drag &amp; drop to upload photo</span>
+            </div>
+
+            <!-- Student ID + Full Name -->
+            <div class="form-top-right">
+              <div class="form-grid">
+                <div class="fg full">
+                  <label for="fStudentId">Student ID <span class="req">*</span></label>
+                  <div class="sid-row">
+                    <input class="fcontrol" type="text" id="fStudentId"
+                           readonly placeholder="Auto-generated" aria-describedby="e-studentId">
+                    <button type="button" class="regen-btn" id="regenBtn"
+                            title="Generate new Student ID" aria-label="Regenerate Student ID">🔄</button>
+                  </div>
+                  <span class="ferr" id="e-studentId" role="alert"></span>
+                </div>
+                <div class="fg full">
+                  <label for="fFullName">Full Name <span class="req">*</span></label>
+                  <input class="fcontrol" type="text" id="fFullName"
+                         placeholder="e.g. Arjun Krishnan" maxlength="80"
+                         aria-describedby="e-fullName" autocomplete="name">
+                  <span class="ferr" id="e-fullName" role="alert"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remaining fields grid -->
+          <div class="form-grid">
+
+            <div class="fg">
+              <label for="fEmail">Email Address <span class="req">*</span></label>
+              <input class="fcontrol" type="email" id="fEmail"
+                     placeholder="student@example.com"
+                     aria-describedby="e-email" autocomplete="email">
+              <span class="ferr" id="e-email" role="alert"></span>
+            </div>
+
+            <div class="fg">
+              <label for="fPhone">Phone Number <span class="req">*</span></label>
+              <input class="fcontrol" type="tel" id="fPhone"
+                     placeholder="10-digit number" maxlength="10"
+                     aria-describedby="e-phone" autocomplete="tel">
+              <span class="ferr" id="e-phone" role="alert"></span>
+            </div>
+
+            <div class="fg">
+              <label for="fGender">Gender <span class="req">*</span></label>
+              <select class="fcontrol" id="fGender" aria-describedby="e-gender">
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <span class="ferr" id="e-gender" role="alert"></span>
+            </div>
+
+            <div class="fg">
+              <label for="fDob">Date of Birth <span class="req">*</span></label>
+              <input class="fcontrol" type="date" id="fDob"
+                     aria-describedby="e-dob">
+              <span class="ferr" id="e-dob" role="alert"></span>
+            </div>
+
+            <div class="fg full">
+              <label for="fCourse">Course <span class="req">*</span></label>
+              <select class="fcontrol" id="fCourse" aria-describedby="e-course">
+                <option value="">Select Course</option>
+                <option>Computer Science</option>
+                <option>Information Technology</option>
+                <option>Business Administration</option>
+                <option>Mechanical Engineering</option>
+                <option>Electrical Engineering</option>
+                <option>Civil Engineering</option>
+                <option>Data Science</option>
+                <option>Psychology</option>
+                <option>Mathematics</option>
+                <option>Physics</option>
+              </select>
+              <span class="ferr" id="e-course" role="alert"></span>
+            </div>
+
+            <div class="fg full">
+              <label for="fAddress">Address <span class="req">*</span></label>
+              <textarea class="fcontrol" id="fAddress"
+                        placeholder="Full postal address…" maxlength="200"
+                        aria-describedby="e-address addrCount"></textarea>
+              <div class="addr-footer">
+                <span class="ferr" id="e-address" role="alert"></span>
+                <span class="char-count" id="addrCount" aria-live="polite">0 / 200</span>
+              </div>
+            </div>
+
+          </div><!-- /.form-grid -->
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="clearBtn">✕ Clear Form</button>
+            <button type="button" class="btn btn-primary"   id="submitBtn">
+              <span id="submitBtnTxt">✦ Register Student</span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </section>
+
+  </div><!-- /.content -->
+</div><!-- /.main -->
+
+<script>
+  function scrollToRegister() {
+    document.getElementById('register').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  /* ── Dashboard refresh ── */
+  function refreshDashboard() {
+    const all     = Storage.getAll();
+    const males   = all.filter(s => s.gender === 'Male').length;
+    const females = all.filter(s => s.gender === 'Female').length;
+
+    document.getElementById('statTotal').textContent  = all.length;
+    document.getElementById('statMale').textContent   = males;
+    document.getElementById('statFemale').textContent = females;
+    document.getElementById('statActive').textContent = all.length;
+
+    // Recent table
+    const recent = all.slice(0, 5);
+    document.getElementById('recentBadge').textContent = recent.length;
+    const rb = document.getElementById('recentBody');
+    rb.innerHTML = recent.length
+      ? recent.map(s => `
+          <tr>
+            <td>${avatarHTML(s, 30, '7px')}</td>
+            <td><strong>${esc(s.studentId)}</strong></td>
+            <td>${esc(s.name)}</td>
+            <td style="font-size:12px;color:var(--text-dim)">${esc(s.course)}</td>
+            <td>${genderBadgeHTML(s.gender)}</td>
+          </tr>`).join('')
+      : `<tr><td colspan="5" class="mini-tbl-empty">No students registered yet</td></tr>`;
+
+    // Course chart
+    const map    = Storage.countByCourse();
+    const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
+    const maxN   = sorted.length ? sorted[0][1] : 1;
+    const cc     = document.getElementById('courseChart');
+    cc.innerHTML = sorted.length
+      ? sorted.map(([c, n]) => `
+          <div class="cc-row">
+            <div class="cc-top">
+              <span class="cc-name">${esc(c)}</span>
+              <span class="cc-num">${n}</span>
+            </div>
+            <div class="cc-track">
+              <div class="cc-fill" style="width:${Math.round(n / maxN * 100)}%"></div>
+            </div>
+          </div>`).join('')
+      : `<div class="cc-empty">No course data yet</div>`;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    refreshDashboard();
+    updateNavBadge();
+    // Highlight correct nav link (Dashboard vs Register)
+    const hash = location.hash;
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    if (hash === '#register') {
+      document.getElementById('navRegister').classList.add('active');
+      document.getElementById('pageTitle').textContent = 'Register Student';
+    } else {
+      document.querySelector('.nav-link[href="index.html"]').classList.add('active');
+    }
+  });
+</script>
+
+<script src="js/storage.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/common.js"></script>
+<script src="js/student.js"></script>
+
+</body>
+</html>

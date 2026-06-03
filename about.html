@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>EDU Pro — About</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+  <style>
+    /* ── About-page specific styles ── */
+    .about-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero::before {
+      content: '';
+      position: absolute; top: -50px; right: -50px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(37,99,235,.3) 0%, transparent 70%);
+    }
+    .about-hero::after {
+      content: '';
+      position: absolute; bottom: -20px; left: 30%;
+      width: 140px; height: 140px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(96,165,250,.15) 0%, transparent 70%);
+    }
+    .about-hero-content { position: relative; z-index: 1; }
+    .about-logo-wrap    { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+    .about-logo-badge {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 4px 16px rgba(37,99,235,.45);
+    }
+    .about-hero h1      { font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -.5px; }
+    .about-hero-sub     { font-size: 12px; color: rgba(255,255,255,.42); letter-spacing: .7px; text-transform: uppercase; margin-top: 2px; }
+    .about-hero p       { font-size: 15px; color: rgba(255,255,255,.68); line-height: 1.65; max-width: 540px; margin-top: 14px; }
+
+    .about-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .about-card-icon { font-size: 26px; margin-bottom: 12px; }
+    .about-card h3   { font-size: 14.5px; font-weight: 800; color: var(--navy); margin-bottom: 10px; }
+    .about-card p    { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
+
+    .tech-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+    .chip {
+      background: var(--blue-light); color: var(--blue);
+      border: 1px solid var(--blue-mid);
+      padding: 4px 12px; border-radius: 99px;
+      font-size: 11.5px; font-weight: 700;
+    }
+    .chip.gray {
+      background: var(--surface2); color: var(--text-mid);
+      border-color: var(--border2);
+    }
+
+    .feat-list {
+      list-style: none;
+      margin-top: 10px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .feat-list li {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 13px; color: var(--text-mid);
+    }
+    .feat-list li::before {
+      content: '✦'; color: var(--blue);
+      font-size: 9px; margin-top: 4px; flex-shrink: 0;
+    }
+
+    .dev-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      box-shadow: var(--shadow-sm);
+      display: flex; align-items: center; gap: 22px;
+    }
+    .dev-av {
+      width: 68px; height: 68px; border-radius: 16px;
+      background: linear-gradient(135deg, var(--blue), #60a5fa);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; font-weight: 800; color: #fff;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-blue);
+    }
+    .dev-info h3  { font-size: 18px; font-weight: 800; color: var(--navy); margin-bottom: 3px; }
+    .dev-info p   { font-size: 13px; color: var(--text-dim); margin-bottom: 10px; }
+    .dev-tags     { display: flex; flex-wrap: wrap; gap: 6px; }
+    .dev-tag {
+      background: var(--surface2); color: var(--text-mid);
+      border: 1px solid var(--border);
+      padding: 3px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 600;
+    }
+
+    code {
+      background: var(--surface2); padding: 2px 6px;
+      border-radius: 5px; font-size: 12px; border: 1px solid var(--border);
+    }
+
+    .file-tree {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px 20px;
+      font-family: 'Courier New', monospace; font-size: 12.5px;
+      color: var(--text-mid); line-height: 1.9; margin-top: 12px;
+    }
+    .file-tree .dir  { color: var(--navy); font-weight: 700; }
+    .file-tree .file { color: var(--text-mid); }
+    .file-tree .ext-html { color: var(--blue); }
+    .file-tree .ext-css  { color: var(--female); }
+    .file-tree .ext-js   { color: var(--warning); }
+  </style>
+</head>
+<body>
+
+<div class="sb-backdrop" id="sbBackdrop" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-top">
+    <div class="sidebar-logo">
+      <div class="logo-badge">🎓</div>
+      <div>
+        <div class="logo-name">EduTech</div>
+        <div class="logo-tag">Pro · Student System</div>
+      </div>
+    </div>
+  </div>
+  <nav class="sidebar-nav" aria-label="Main navigation">
+    <div class="nav-section-label">Main Menu</div>
+    <a href="index.html" class="nav-link">
+      <span class="nav-icon">📊</span>
+      <span class="nav-text">Dashboard</span>
+    </a>
+    <a href="index.html#register" class="nav-link">
+      <span class="nav-icon">➕</span>
+      <span class="nav-text">Register Student</span>
+    </a>
+    <a href="students.html" class="nav-link">
+      <span class="nav-icon">📋</span>
+      <span class="nav-text">Student List</span>
+      <span class="nav-badge" id="navCount">0</span>
+    </a>
+    <div class="nav-section-label" style="margin-top:12px">System</div>
+    <a href="about.html" class="nav-link active">
+      <span class="nav-icon">ℹ️</span>
+      <span class="nav-text">About</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">EduTech Pro v2.0 &nbsp;·&nbsp; 2026</div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <header class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="page-title-top">About</div>
+    <div class="topbar-search">
+      <span style="color:var(--text-muted);font-size:14px">🔍</span>
+      <input type="text" placeholder="Search students…" id="quickSearchInput" aria-label="Quick search">
+    </div>
+    <div class="topbar-avatar" title="Admin">A</div>
+  </header>
+
+  <div class="content">
+
+    <!-- Hero -->
+    <div class="about-hero">
+      <div class="about-hero-content">
+        <div class="about-logo-wrap">
+          <div class="about-logo-badge">🎓</div>
+          <div>
+            <h1>EduTech Pro</h1>
+            <div class="about-hero-sub">Student Registration &amp; Management System</div>
+          </div>
+        </div>
+        <p>A modern, multi-page student management platform that streamlines enrollment, record-keeping, and academic analytics — built entirely with vanilla HTML5, CSS3, and JavaScript ES6. No frameworks. No backend. Just the web platform used well.</p>
+      </div>
+    </div>
+
+    <!-- Cards grid -->
+    <div class="about-cards">
+
+      <div class="about-card">
+        <div class="about-card-icon">🎯</div>
+        <h3>Project Name &amp; Purpose</h3>
+        <p><strong>EduTech Pro</strong> helps educational institutions manage student registrations efficiently. It provides a complete CRUD interface to register, track, search, filter, and maintain student records — all persisted in the browser with no server needed.</p>
+        <ul class="feat-list" style="margin-top:12px">
+          <li>Register students with photo upload</li>
+          <li>Auto-generated unique Student IDs (STU-XXXX)</li>
+          <li>Real-time search and multi-filter</li>
+          <li>Analytics dashboard with recent data &amp; charts</li>
+          <li>Full offline capability via LocalStorage</li>
+        </ul>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-icon">⚙️</div>
+        <h3>Technologies Used</h3>
+        <p>Built with standard web technologies — zero dependencies, no build tools:</p>
+        <div class="tech-chips">
+          <span class="chip">HTML5</span>
+          <span class="chip">CSS3</span>
+          <span class="chip">JavaScript ES6+</span>
+          <span class="chip">Local Storage API</span>
+          <span class="chip gray">CSS Grid</span>
+          <span class="chip gray">CSS Flexbox</span>
+          <span class="chip gray">CSS Custom Properties</span>
+          <span class="chip gray">FileReader API</span>
+          <span class="chip gray">Base64 Encoding</span>
+          <span class="chip gray">Plus Jakarta Sans</span>
+          <span class="chip gray">CSS Animations</span>
+          <span class="chip gray">Responsive Design</span>
+        </div>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-icon">✨</div>
+        <h3>Key Features</h3>
+        <ul class="feat-list">
+          <li>Full CRUD — Create, Read, Update, Delete students</li>
+          <li>Photo upload with drag &amp; drop, live preview &amp; Base64 storage</li>
+          <li>Auto-generated unique STU-XXXX Student IDs with regenerate</li>
+          <li>Inline form validation — 8 rules including uniqueness checks</li>
+          <li>Live address character counter (warns at 170+)</li>
+          <li>Simultaneous search + gender + course filter</li>
+          <li>Student detail view modal with all fields</li>
+          <li>Confirm-before-delete modal</li>
+          <li>Top-left slide-in toast notifications (4 types)</li>
+          <li>Fully responsive — mobile hamburger, tablet, desktop</li>
+          <li>XSS-safe HTML output escaping throughout</li>
+          <li>Accessible — ARIA roles, labels, live regions</li>
+        </ul>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card-icon">🗂️</div>
+        <h3>Folder Structure</h3>
+        <p>Clean separation of concerns across 3 HTML pages, 3 CSS files, and 4 JS modules:</p>
+        <div class="file-tree">
+          <span class="dir">student-management-system/</span><br>
+          ├── <span class="ext-html">index.html</span> &nbsp;&nbsp;&nbsp;&nbsp;Dashboard + Register<br>
+          ├── <span class="ext-html">students.html</span> &nbsp;Student List<br>
+          ├── <span class="ext-html">about.html</span> &nbsp;&nbsp;&nbsp;&nbsp;About page<br>
+          ├── <span class="dir">css/</span><br>
+          │&nbsp;&nbsp; ├── <span class="ext-css">style.css</span> &nbsp;&nbsp;&nbsp;Tokens, layout, shared<br>
+          │&nbsp;&nbsp; ├── <span class="ext-css">student.css</span> &nbsp;Form &amp; table styles<br>
+          │&nbsp;&nbsp; └── <span class="ext-css">responsive.css</span> Breakpoints<br>
+          ├── <span class="dir">js/</span><br>
+          │&nbsp;&nbsp; ├── <span class="ext-js">storage.js</span> &nbsp;&nbsp;LocalStorage CRUD<br>
+          │&nbsp;&nbsp; ├── <span class="ext-js">validation.js</span> Form rules<br>
+          │&nbsp;&nbsp; ├── <span class="ext-js">common.js</span> &nbsp;&nbsp;Shared utilities<br>
+          │&nbsp;&nbsp; └── <span class="ext-js">student.js</span> &nbsp;UI logic &amp; controllers<br>
+          ├── <span class="dir">images/</span><br>
+          └── <span class="dir">assets/</span>
+        </div>
+      </div>
+
+    </div><!-- /.about-cards -->
+
+    <!-- Developer card -->
+    <div class="dev-card">
+      <div class="dev-av">D</div>
+      <div class="dev-info">
+        <h3>Developer Information</h3>
+        <h5>Darin Tony</h5>
+        <p>Software Developer/ UI-UX Designer</p>
+        <p style="font-size: 12px; color: var(--accent-primary);">darintony36@gmail.com</p>
+        <p style="font-size: 12px; color: var(--accent-primary);">Phone: 8089596181</p>
+        <p style="font-size: 12px; color: var(--accent-primary);">
+          <a href="https://linkedin.com/in/darintony" target="_blank" style="color: var(--accent-primary);"><i class="fab fa-linkedin"></i> LinkedIn</a> | 
+          <a href="https://github.com/darintony" target="_blank" style="color: var(--accent-primary);"><i class="fab fa-github"></i> GitHub</a>
+        </p>
+        <div class="dev-tags">
+          <span class="dev-tag">Frontend Developer</span>
+          <span class="dev-tag">UI/UX Design</span>
+          <span class="dev-tag">Vanilla JS</span>
+          <span class="dev-tag">Multi-page Architecture</span>
+          <span class="dev-tag">EduTech Pro v2.0</span>
+          <span class="dev-tag">2026</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.content -->
+</div><!-- /.main -->
+
+<script src="js/storage.js"></script>
+<script src="js/common.js"></script>
+</body>
+</html>

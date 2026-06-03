@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>EduTech Pro — Student List</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/student.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+</head>
+<body>
+
+<!-- Sidebar backdrop (mobile) -->
+<div class="sb-backdrop" id="sbBackdrop" onclick="closeSidebar()"></div>
+
+<!-- ══════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-top">
+    <div class="sidebar-logo">
+      <div class="logo-badge">🎓</div>
+      <div>
+        <div class="logo-name">EduTech</div>
+        <div class="logo-tag">Pro · Student System</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav" aria-label="Main navigation">
+    <div class="nav-section-label">Main Menu</div>
+    <a href="index.html" class="nav-link">
+      <span class="nav-icon">📊</span>
+      <span class="nav-text">Dashboard</span>
+    </a>
+    <a href="index.html#register" class="nav-link">
+      <span class="nav-icon">➕</span>
+      <span class="nav-text">Register Student</span>
+    </a>
+    <a href="students.html" class="nav-link active">
+      <span class="nav-icon">📋</span>
+      <span class="nav-text">Student List</span>
+      <span class="nav-badge" id="navCount">0</span>
+    </a>
+    <div class="nav-section-label" style="margin-top:12px">System</div>
+    <a href="about.html" class="nav-link">
+      <span class="nav-icon">ℹ️</span>
+      <span class="nav-text">About</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">EduTech Pro v2.0 &nbsp;·&nbsp; 2026</div>
+</aside>
+
+<!-- ══════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════ -->
+<div class="main">
+
+  <header class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="page-title-top">Student List</div>
+    <div class="topbar-search">
+      <span style="color:var(--text-muted);font-size:14px">🔍</span>
+      <input type="text" placeholder="Search students…" id="quickSearchInput" aria-label="Quick search">
+    </div>
+    <div class="topbar-avatar" title="Admin">A</div>
+  </header>
+
+  <div class="content">
+
+    <div class="sec-head">
+      <div>
+        <h2>Student Directory</h2>
+        <p>Browse, search and manage all enrolled students</p>
+      </div>
+      <a href="index.html#register" class="btn btn-primary">➕ Add Student</a>
+    </div>
+
+    <!-- Toolbar: search + filters -->
+    <div class="list-toolbar" role="search">
+      <div class="l-search">
+        <span class="search-ic">🔍</span>
+        <input type="text" id="listSearch"
+               placeholder="Search by ID, name, email, or course…"
+               aria-label="Search students">
+      </div>
+      <select class="flt-sel" id="fltGender" aria-label="Filter by gender">
+        <option value="">All Genders</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+      <select class="flt-sel" id="fltCourse" aria-label="Filter by course">
+        <option value="">All Courses</option>
+        <option>Computer Science</option>
+        <option>Information Technology</option>
+        <option>Business Administration</option>
+        <option>Mechanical Engineering</option>
+        <option>Electrical Engineering</option>
+        <option>Civil Engineering</option>
+        <option>Data Science</option>
+        <option>Psychology</option>
+        <option>Mathematics</option>
+        <option>Physics</option>
+      </select>
+    </div>
+
+    <div class="results-info" id="resultsInfo" aria-live="polite"></div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-scroll">
+        <table class="data-tbl" aria-label="Student records">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Student ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Gender</th>
+              <th>Course</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tblBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /.content -->
+</div><!-- /.main -->
+
+<!-- ══════════════════════════════════════════
+     VIEW STUDENT MODAL
+══════════════════════════════════════════ -->
+<div class="overlay" id="viewOverlay" role="dialog" aria-modal="true" aria-labelledby="viewModalTitle">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title" id="viewModalTitle">Student Details</div>
+      <button class="modal-close" onclick="closeModal('viewOverlay')" aria-label="Close modal">✕</button>
+    </div>
+    <div class="modal-body" id="viewModalBody"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CONFIRM DELETE MODAL
+══════════════════════════════════════════ -->
+<div class="overlay" id="delOverlay" role="dialog" aria-modal="true" aria-labelledby="delTitle">
+  <div class="modal modal-sm">
+    <div class="confirm-body">
+      <div class="confirm-icon-wrap" aria-hidden="true">🗑️</div>
+      <div class="confirm-title" id="delTitle">Delete Student?</div>
+      <div class="confirm-sub" id="delConfirmSub">This action cannot be undone.</div>
+      <div class="confirm-btns">
+        <button class="btn btn-secondary" onclick="closeModal('delOverlay')">Cancel</button>
+        <button class="btn btn-danger" id="delConfirmBtn">Delete Record</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/common.js"></script>
+<script src="js/student.js"></script>
+
+</body>
+</html>
