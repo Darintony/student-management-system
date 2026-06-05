@@ -98,8 +98,20 @@ function toast(title, msg, type = 'info') {
   const wrap  = document.getElementById('toastWrap');
   if (!wrap) return;
 
+  const key = `${type}|${title}|${msg}`;
+  const existing = Array.from(wrap.children).find(el => el.dataset.toastKey === key);
+
+  if (existing) {
+    clearTimeout(existing._timer);
+    existing.classList.remove('toast-out');
+    existing._timer = setTimeout(() => dismissToast(existing), 4500);
+    wrap.appendChild(existing);
+    return;
+  }
+
   const el = document.createElement('div');
   el.className = `toast toast-${type}`;
+  el.dataset.toastKey = key;
   el.setAttribute('role', 'alert');
   el.innerHTML = `
     <div class="toast-icon-wrap">${icons[type] || icons.info}</div>
